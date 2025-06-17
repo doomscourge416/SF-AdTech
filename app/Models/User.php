@@ -40,6 +40,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    const ROLE_ADVERTISER = 'advertiser';
+    const ROLE_WEBMASTER = 'webmaster';
+    const ROLE_ADMIN = 'admin';
+
+    // Получение роли пользователем
+    public function getRole()
+    {
+        return $this->attributes['role'] ?? 'advertiser'; // по умолчанию роль становится AVERTISER
+    }
+
     // Связь: пользователь может иметь много офферов
     public function offers()
     {
