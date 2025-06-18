@@ -6,7 +6,8 @@
     <ul>
         @foreach($offers as $offer)
             <li>
-                {{ $offer->title }} — {{ $offer->payout }} руб.
+                <a href="/offers/{{ $offer->id }}">{{ $offer->title }}</a>
+                — {{ $offer->payout }} руб.
             </li>
         @endforeach
     </ul>

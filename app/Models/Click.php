@@ -10,4 +10,18 @@ class Click extends Model
     use HasFactory;
 
     protected $fillable = ['affiliate_link_id', 'ip', 'user_agent'];
+
+
+    // Связь с affiliate_link
+    public function affiliateLink()
+    {
+        return $this->belongsTo(AffiliateLink::class);
+    }
+
+    // Связь с offer через affiliate_link
+    public function offer()
+    {
+        return $this->belongsToThrough(Offer::class, AffiliateLink::class);
+    }
+
 }
