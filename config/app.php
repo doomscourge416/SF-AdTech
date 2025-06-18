@@ -2,6 +2,11 @@
 
 return [
 
+    'commission' => [
+        'system' => env('COMMISSION_SYSTEM', 0.2),
+        'webmaster' => env('COMMISSION_WEBMASTER', 0.8),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

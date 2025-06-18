@@ -51,19 +51,23 @@ class OfferController extends Controller
     {
         $offer = Offer::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
 
-        // Общее количество кликов по офферу через аффилиатные ссылки
-        $totalClicks = Click::whereHas('affiliateLink', function ($query) use ($offer) {
-            $query->where('offer_id', $offer->id);
-        })->count();
+        $date = $request->input('date') ? new \Carbon\Carbon($request->input('date')) : now();
 
-        // Клики за сегодня
-        $todayClicks = Click::whereDate('created_at', today())
-            ->whereHas('affiliateLink', function ($query) use ($offer) {
-                $query->where('offer_id', $offer->id);
-            })
-            ->count();
+        $totalClicks = $offer->total_clicks;
+        $todayClicks = $offer->today_clicks;
+        $thisMonthClicks = $offer->this_month_clicks;
+        $thisYearClicks = $offer->this_year_clicks;
 
-        return view('offers.show', compact('offer', 'totalClicks', 'todayClicks'));
+        return view('offers.show', [
+            'offer' => $offer,
+            'totalClicks' => $offer->total_clicks,
+            'todayClicks' => $offer->today_clicks,
+            'thisMonthClicks' => $offer->this_month_clicks,
+            'thisYearClicks' => $offer->this_year_clicks,
+            'systemEarnings' => $offer->system_earnings,
+            'webmasterEarnings' => $offer->webmaster_earnings,
+        ]);
+
     }
 
 }
