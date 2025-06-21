@@ -12,7 +12,7 @@ class RedirectorController extends Controller
 	public function redirect(string $token)
 	{
 		// Ищем ссылку по токену
-		$link = AffiliateLink::where('token', $token)->first();
+		$link = AffiliateLink::where('token', $token)->firstOrFail();
 
 		if (!$link) {
 			abort(404, 'Ссылка не найдена');

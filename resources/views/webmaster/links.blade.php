@@ -7,8 +7,12 @@
         <ul>
             @foreach($links as $link)
                 <li>
+                    
                     {{ $link->offer->title }}
-                    <code>/go/{{ $link->token }}</code>
+                    <a href="/go/{{ $link->token }}" target="_blank" class="btn btn-sm btn-success">
+                        /go/{{ $link->token }}
+                    </a>
+
                 </li>
             @endforeach
         </ul>
