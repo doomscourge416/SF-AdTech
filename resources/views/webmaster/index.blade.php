@@ -7,7 +7,7 @@
         <ul>
             @foreach($offers as $offer)
                 <li>
-                    {{ $offer->title }} — {{ $offer->payout }} руб.
+                    {{ $offer->title }} – {{ $offer->payout }} руб.
                     <form method="POST" action="/webmaster/subscribe/{{ $offer->id }}">
                         @csrf
                         <button type="submit" class="btn btn-success">Подписаться</button>

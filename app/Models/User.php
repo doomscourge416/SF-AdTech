@@ -44,10 +44,24 @@ class User extends Authenticatable
     const ROLE_WEBMASTER = 'webmaster';
     const ROLE_ADMIN = 'admin';
 
-    // Получение роли пользователем
     public function getRole()
     {
-        return $this->attributes['role'] ?? 'advertiser'; // по умолчанию роль становится AVERTISER
+        return $this->attributes['role'] ?? self::ROLE_WEBMASTER;
+    }
+
+    public function isWebmaster()
+    {
+        return $this->getRole() === self::ROLE_WEBMASTER;
+    }
+
+    public function isAdvertiser()
+    {
+        return $this->getRole() === self::ROLE_ADVERTISER;
+    }
+
+    public function isAdministrator()
+    {
+        return $this->getRole() === self::ROLE_ADMIN;
     }
 
     // Связь: пользователь может иметь много офферов
