@@ -44,8 +44,8 @@
                         label: 'Клики по офферу',
                         data: [
                             {{ $offer->today_clicks }},
-                            {{ $offer->month_clicks }},
-                            {{ $offer->year_clicks }}
+                            {{ $offer->this_month_clicks }},
+                            {{ $offer->this_year_clicks }}
                         ],
                         backgroundColor: 'rgba(54, 162, 235, 0.6)',
                         borderColor: 'rgba(54, 162, 235, 1)',
