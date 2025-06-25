@@ -38,16 +38,23 @@ class AdminController extends Controller
         ));
     }
 
-    public function approve(Request $request, $userId): JsonResponse
+    public function approve(Request $request, $userId)
     {
+        // Находим пользователя
         $user = User::findOrFail($userId);
         $user->is_approved = true;
         $user->save();
 
         if ($request->ajax()) {
-            return response()->json(['success' => true, 'message' => 'Пользователь одобрен']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Пользователь одобрен',
+                'user_id' => $user->id
+            ]);
         }
 
-        return back()->with('status', 'Пользователь одобрен');
+        // Если это обычная форма → редиректим обратно
+        return back()->with('status', "Пользователь #{$userId} одобрен");
     }
+
 }

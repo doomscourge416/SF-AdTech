@@ -33,8 +33,9 @@ Route::post('/webmaster/subscribe/{offer_id}', [\App\Http\Controllers\WebmasterC
 // Admin
 // Route::get('/admin', [AdminController::class, 'dashboard'])->middleware(['auth', 'admin']);
 Route::get('/admin', [AdminController::class, 'dashboard'])->middleware('auth');
-// Route::post('/admin/approve/{id}', [AdminController::class, 'approve'])->middleware(['auth', 'admin']);
 Route::post('/admin/approve/{id}', [AdminController::class, 'approve'])->middleware('auth');
+// Route::post('/admin/approve/{id}', [AdminController::class, 'approve'])->middleware(['auth', 'admin']);
+
 
 Route::get('/affiliate-links', [\App\Http\Controllers\WebmasterController::class, 'affiliateLinks']);
 Route::get('/go/{token}', [RedirectorController::class, 'redirect']);

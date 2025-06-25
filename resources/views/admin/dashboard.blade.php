@@ -2,79 +2,102 @@
 
 @section('title', 'Панель администратора')
 @section('content')
-    <h1>Добро пожаловать, администратор</h1>
+    <h1>Панель администратора</h1>
 
     <div class="row">
+        <!-- Неодобренные пользователи -->
         <div class="col-md-6">
-            <h2>Пользователи</h2>
-            <table class="table table-bordered">
-                <tr><th>ID</th><th>Имя</th><th>Email</th><th>Роль</th></tr>
-                @foreach ($users as $user)
-                    <tr>
-                        <td>{{ $user->id }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->role }}</td>
-                        <td>
-                            @if (!$user->is_approved)
-                                <button class="btn btn-success btn-sm approve-btn" data-user-id="{{ $user->id }}">Одобрить</button>
-                            @else
-                                <span class="text-muted">Одобрен</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
+            <h2>На модерации (ожидает одобрения)</h2>
+            @if ($users->where('is_approved', false)->isNotEmpty())
+                <table class="table table-bordered">
+                    <tr><th>ID</th><th>Имя</th><th>Email</th><th>Роль</th><th>Действие</th></tr>
+                    @foreach ($users->where('is_approved', false) as $user)
+                        <tr>
+                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->role }}</td>
+                            <td>
+                                <form method="POST" action="/admin/approve/{{ $user->id }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success btn-sm">Одобрить</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            @else
+                <p>Нет пользователей на модерации</p>
+            @endif
         </div>
 
+        <!-- Активные пользователи -->
         <div class="col-md-6">
-            <h2>Офферы</h2>
-            <table class="table table-bordered">
-                <tr><th>ID</th><th>Название</th><th>Клики</th><th>Подписки</th></tr>
-                @foreach($offers as $offer)
-                    <tr>
-                        <td>{{ $offer->id }}</td>
-                        <td>{{ $offer->title }}</td>
-                        <td>{{ $offer->clicks_count }}</td>
-                        <td>{{ $offer->affiliate_links_count }}</td>
-                    </tr>
-                @endforeach
-            </table>
+            <h2>Активные пользователи</h2>
+            @if ($users->where('is_approved', true)->isNotEmpty())
+                <table class="table table-bordered">
+                    <tr><th>ID</th><th>Имя</th><th>Email</th><th>Роль</th></tr>
+                    @foreach ($users->where('is_approved', true) as $user)
+                        <tr>
+                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->role }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            @else
+                <p>Нет активных пользователей</p>
+            @endif
         </div>
     </div>
 
     <div class="mt-4">
-        <h2>Статистика</h2>
-        <p>Всего аффилиатных ссылок: {{ $totalLinks }}</p>
-        <p>Всего кликов: {{ $totalClicks }}</p>
+        <h3>Статистика системы</h3>
+        <ul>
+            <li>Всего ссылок: {{ $totalLinks }}</li>
+            <li>Всего кликов: {{ $totalClicks }}</li>
+            <li>Неактивных пользователей: {{ $users->where('is_approved', false)->count() }}</li>
+            <li>Активных пользователей: {{ $users->where('is_approved', true)->count() }}</li>
+        </ul>
     </div>
 
-    <a href="/logout" class="btn btn-danger">Выйти из админки</a>
+    <a href="/logout" class="btn btn-danger mt-3">Выйти из админки</a>
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.approve-btn');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.approve-btn');
 
-    buttons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const userId = button.getAttribute('data-user-id');
+            buttons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const userId = button.getAttribute('data-user-id');
+                    const row = button.closest('tr');
 
-            try {
-                const res = await axios.post(`/admin/approve/${userId}`);
-                if (res.data.success) {
-                    // Обновляем интерфейс без перезагрузки
-                    button.innerText = 'Одобрен';
-                    button.disabled = true;
-                }
-            } catch (err) {
-                alert('Ошибка при одобрении');
-                console.error(err);
-            }
+                    try {
+                        const response = await fetch(`/admin/approve/${userId}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json',
+                            }
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            // Удаляем строку пользователя после одобрения
+                            row.remove();
+                        }
+
+                    } catch (err) {
+                        console.error('Ошибка:', err);
+                        alert('Не удалось одобрить пользователя');
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 @endsection
