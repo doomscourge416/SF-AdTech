@@ -9,12 +9,19 @@
             <h2>Пользователи</h2>
             <table class="table table-bordered">
                 <tr><th>ID</th><th>Имя</th><th>Email</th><th>Роль</th></tr>
-                @foreach($users as $user)
+                @foreach ($users as $user)
                     <tr>
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->role }}</td>
+                        <td>
+                            @if (!$user->is_approved)
+                                <button class="btn btn-success btn-sm approve-btn" data-user-id="{{ $user->id }}">Одобрить</button>
+                            @else
+                                <span class="text-muted">Одобрен</span>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </table>
@@ -43,4 +50,31 @@
     </div>
 
     <a href="/logout" class="btn btn-danger">Выйти из админки</a>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.approve-btn');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const userId = button.getAttribute('data-user-id');
+
+            try {
+                const res = await axios.post(`/admin/approve/${userId}`);
+                if (res.data.success) {
+                    // Обновляем интерфейс без перезагрузки
+                    button.innerText = 'Одобрен';
+                    button.disabled = true;
+                }
+            } catch (err) {
+                alert('Ошибка при одобрении');
+                console.error(err);
+            }
+        });
+    });
+});
+</script>
 @endsection

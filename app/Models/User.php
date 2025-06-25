@@ -40,8 +40,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    const ROLE_ADVERTISER = 'advertiser';
+    public function isAdmin()
+    {
+        return $this->getRole() === self::ROLE_ADMIN;
+    }
+
+    // Константы
     const ROLE_WEBMASTER = 'webmaster';
+    const ROLE_ADVERTISER = 'advertiser';
     const ROLE_ADMIN = 'admin';
 
     public function getRole()
