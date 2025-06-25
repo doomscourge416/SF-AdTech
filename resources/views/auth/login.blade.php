@@ -1,27 +1,19 @@
 @extends('layouts.app')
-
-@section('title', 'Вход')
+@section('title', 'Вход в систему')
 @section('content')
-    <h1>Войти в систему</h1>
-
-    @if (session('status'))
-        <div class="alert alert-info">{{ session('status') }}</div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form method="POST" action="/login">
-        @csrf
-        <input type="email" name="email" placeholder="Email" required><br>
-        <input type="password" name="password" placeholder="Пароль" required><br>
-        <button type="submit">Войти</button>
-    </form>
+    <div class="container mt-5">
+        <h1 class="text-center">Вход в систему</h1>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" id="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Войти</button>
+        </form>
+    </div>
 @endsection
