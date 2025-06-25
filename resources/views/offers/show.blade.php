@@ -17,7 +17,7 @@
         <br>
         <li>Доход за сегодня: {{ $offer->today_clicks * $offer->payout }} руб.</li>
         <li>Доход за месяц: {{ $offer->this_month_clicks * $offer->payout }} руб.</li>
-        <li>Доход за год: {{ $offer->this_year_clicks * $offer->poutlay }} руб.</li>
+        <li>Доход за год: {{ $offer->this_year_clicks * $offer->payout }} руб.</li>
     </ul>
     <ul>
         <li>Доход системы за всё время: {{ $systemEarnings }} руб.</li>

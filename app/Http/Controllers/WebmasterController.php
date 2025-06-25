@@ -12,7 +12,10 @@ class WebmasterController extends Controller
     public function index()
     {
         // Получаем все офферы, доступные для подписки
-        $offers = Offer::all();
+        // $offers = Offer::all();
+        $offers = Offer::whereDoesntHave('affiliateLinks', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->get();
         return view('webmaster.index', compact('offers'));
     }
 
