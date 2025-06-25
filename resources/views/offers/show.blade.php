@@ -30,48 +30,49 @@
         <button type="submit" class="btn btn-primary mt-2">Показать статистику за выбранную дату</button>
     </form>
 
+    <div class="chart-wrapper" style="aspect-ratio: 2 / 1; max-width: 600px; margin: 0 auto;">
+        <canvas id="offerStatsChart" width="400" height="200"></canvas>
 
-    <canvas id="offerStatsChart" width="400" height="200"></canvas>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('offerStatsChart').getContext('2d');
-        const offerStatsChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Сегодня', 'Месяц', 'Год'],
-                datasets: [{
-                    label: 'Клики по офферу',
-                    data: [
-                        {{ $offer->today_clicks }},
-                        {{ $offer->month_clicks }},
-                        {{ $offer->year_clicks }}
-                    ],
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('offerStatsChart').getContext('2d');
+            const offerStatsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Сегодня', 'Месяц', 'Год'],
+                    datasets: [{
+                        label: 'Клики по офферу',
+                        data: [
+                            {{ $offer->today_clicks }},
+                            {{ $offer->month_clicks }},
+                            {{ $offer->year_clicks }}
+                        ],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: true },
+                        title: {
+                            display: true,
+                            text: 'Статистика по переходам'
                         }
                     }
-                },
-                plugins: {
-                    legend: { display: true },
-                    title: {
-                        display: true,
-                        text: 'Статистика по переходам'
-                    }
                 }
-            }
-        });
-    </script>
+            });
+        </script>
+    </div>
 
     <a href="/offers" class="btn btn-secondary">Назад к списку</a>
 @endsection
