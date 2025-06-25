@@ -29,7 +29,11 @@
                 @auth
 
                     <li class="nav-item">
-                            <a class="nav-link" href="/offers">Офферы</a>
+                            <a class="nav-link" href="/webmaster">Доступные офферы</a>
+                    </li>
+
+                    <li class="nav-item">
+                            <a class="nav-link" href="/offers">Список Своих Офферов</a>
                     </li>
 
                     <li class="nav-item">
@@ -38,7 +42,7 @@
 
                     @if (auth()->user()->isAdvertiser())
                         <li class="nav-item">
-                            <a class="nav-link" href="/offers">Офферы</a>
+                            <a class="nav-link" href="/offers">Список Своих Офферов</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/offers/create">Создать оффер</a>
