@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Offer;
 use App\Models\AffiliateLink;
+use App\Models\Click;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class WebmasterController extends Controller
@@ -22,8 +24,31 @@ class WebmasterController extends Controller
     public function affiliateLinks()
     {
         // Все аффилиатные ссылки текущего пользователя
-        $links = AffiliateLink::where('user_id', auth()->id())->with('offer')->get();
-        return view('webmaster.links', compact('links'));
+        $links = auth()->user()->affiliateLinks()->with('offer')->get();
+
+        // Получаем клики по этим ссылкам
+        $clicks = Click::whereIn('affiliate_link_id', $links->pluck('id'))
+            ->selectRaw('affiliate_link_id, count(*) as total')
+            ->groupBy('affiliate_link_id')
+            ->pluck('total', 'affiliate_link_id');
+
+        // Формируем данные для графика
+        $chartData = [];
+
+        foreach ($links as $link) {
+            $offerTitle = $link->offer->title;
+            $clickCount = $clicks[$link->id] ?? 0;
+            $color = '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6); // генерация цвета
+
+            $chartData[] = [
+                'label' => $offerTitle,
+                'clicks' => $clickCount,
+                'color' => $color,
+                'url' => '/go/' . $link->token
+            ];
+        }
+
+        return view('webmaster.links', compact('links', 'chartData'));
     }
 
     public function subscribe(Request $request, $offerId)
