@@ -4,57 +4,59 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Offer;
-use App\Models\AffiliateLink;
 use App\Models\Click;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\JsonResponse;
+use App\Models\AffiliateLink;
+use App\Models\Offer;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Проверяем, залогинен ли пользователь
-        if (!Auth::check()) {
-            abort(403, 'Вы не авторизованы');
-        }
+        // Получаем всех пользователей, кроме себя
+        $users = User::where('id', '!=', auth()->id())->get();
 
-        // И проверяем роль
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Только администратор может открыть эту страницу');
-        }
+        // Статистика по дням
+        $clicksByDay = Click::selectRaw('DATE(created_at) as date, count(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->pluck('count', 'date');
 
-        // Статистика
-        $users = User::where('id', '!=', Auth::id())->get();
-        $offers = Offer::withCount(['affiliateLinks', 'clicks'])->get();
-        $totalClicks = Click::count();
-        $totalLinks = AffiliateLink::count();
+        // Доход системы по дням
+        $revenueByDay = DB::table('clicks')
+            ->join('affiliate_links', 'clicks.affiliate_link_id', '=', 'affiliate_links.id')
+            ->join('offers', 'affiliate_links.offer_id', '=', 'offers.id')
+            ->selectRaw('DATE(clicks.created_at) as date, SUM(offers.payout * 0.2) as revenue')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->pluck('revenue', 'date');
 
-        return view('admin.dashboard', compact(
-            'users',
-            'offers',
-            'totalLinks',
-            'totalClicks'
-        ));
+        return view('admin.dashboard', compact('users', 'clicksByDay', 'revenueByDay'));
     }
 
-    public function approve(Request $request, $userId)
+    public function approve(Request $request, $id)
     {
-        // Находим пользователя
-        $user = User::findOrFail($userId);
+        $user = User::findOrFail($id);
         $user->is_approved = true;
         $user->save();
 
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Пользователь одобрен',
-                'user_id' => $user->id
-            ]);
-        }
-
-        // Если это обычная форма → редиректим обратно
-        return back()->with('status', "Пользователь #{$userId} одобрен");
+        return back()->with('status', 'Пользователь одобрен');
     }
 
+    public function block(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = $user->status === 'blocked' ? 'active' : 'blocked';
+        $user->save();
+
+        return back()->with('status', 'Статус пользователя изменён');
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return back()->with('status', 'Пользователь удалён');
+    }
 }
