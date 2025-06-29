@@ -9,8 +9,13 @@ class Click extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['affiliate_link_id', 'ip', 'user_agent'];
-
+    protected $fillable = [
+        'affiliate_link_id',
+        'ip',
+        'user_agent',
+        'source',
+        'created_at' 
+    ];
 
     // Связь с affiliate_link
     public function affiliateLink()

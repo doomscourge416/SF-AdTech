@@ -7,31 +7,56 @@ use App\Models\User;
 use App\Models\Click;
 use App\Models\AffiliateLink;
 use App\Models\Offer;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+
     public function dashboard()
     {
-        // Получаем всех пользователей, кроме себя
         $users = User::where('id', '!=', auth()->id())->get();
 
-        // Статистика по дням
-        $clicksByDay = Click::selectRaw('DATE(created_at) as date, count(*) as count')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->pluck('count', 'date');
-
-        // Доход системы по дням
-        $revenueByDay = DB::table('clicks')
+        // 1. График доходов (аналогично вебмастеру)
+        $revenueData = DB::table('clicks')
             ->join('affiliate_links', 'clicks.affiliate_link_id', '=', 'affiliate_links.id')
             ->join('offers', 'affiliate_links.offer_id', '=', 'offers.id')
-            ->selectRaw('DATE(clicks.created_at) as date, SUM(offers.payout * 0.2) as revenue')
+            ->selectRaw('strftime("%Y-%m", clicks.created_at) as month, SUM(offers.payout * 0.2) as revenue')
+            ->groupBy('month')
+            ->orderBy('month', 'desc')
+            ->limit(6)
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->month => $item->revenue];
+            });
+
+        // 2. График кликов (простая группировка по дням)
+        $clicksData = Click::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->where('created_at', '>=', now()->subDays(30))
             ->groupBy('date')
             ->orderBy('date')
-            ->pluck('revenue', 'date');
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->date => $item->count];
+            });
 
-        return view('admin.dashboard', compact('users', 'clicksByDay', 'revenueByDay'));
+        // 3. Источники трафика (аналогично вебмастеру)
+        $sourcesData = Click::select('source')
+            ->selectRaw('COUNT(*) as count')
+            ->groupBy('source')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->source => $item->count];
+            });
+
+        return view('admin.dashboard', [
+            'users' => $users,
+            'stats' => [
+                'revenueByMonth' => $revenueData,
+                'clicksLast30Days' => $clicksData,
+                'trafficSources' => $sourcesData
+            ]
+        ]);
     }
 
     public function approve(Request $request, $id)
