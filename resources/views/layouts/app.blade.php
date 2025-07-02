@@ -26,11 +26,11 @@
                 @auth
 
                     <li class="nav-item">
-                            <a class="nav-link" href="/webmaster">Доступные офферы</a>
+                            <a class="nav-link" href="/webmaster/links">Доступные офферы</a>
                     </li>
 
                     <li class="nav-item">
-                            <a class="nav-link" href="/offers">Список Своих Офферов</a>
+                            <a class="nav-link" href="/offers">Все Офферы</a>
                     </li>
 
                     <li class="nav-item">
@@ -51,7 +51,7 @@
                             <a class="nav-link" href="/webmaster">Веб-мастер</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webmaster/links">Мои ссылки</a>
+                            <a class="nav-link" href="/webmaster/links">Доступные офферы</a>
                         </li>
                     @endif
 
