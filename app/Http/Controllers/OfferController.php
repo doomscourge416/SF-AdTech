@@ -70,4 +70,18 @@ class OfferController extends Controller
 
     }
 
+    public function availableOffers()
+    {
+        // Получаем ID офферов, на которые пользователь УЖЕ подписан
+        $subscribedOfferIds = auth()->user()->affiliateLinks()->pluck('offer_id');
+
+        // Выводим ВСЕ активные офферы, кроме уже подключенных
+        $offers = Offer::where('is_active', true)
+            ->whereNotIn('id', $subscribedOfferIds)
+            ->latest() // Сортировка по дате создания (новые сверху)
+            ->paginate(10);
+
+        return view('webmaster.available-offers', compact('offers'));
+    }
+
 }

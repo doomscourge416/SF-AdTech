@@ -47,7 +47,7 @@
                             <a class="nav-link" href="/webmaster">Веб-мастер</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webmaster/links">Офферы доступные к подписке</a>
+                            <a class="nav-link" href="{{ route('webmaster.offers') }}">Офферы доступные к подписке</a>
                         </li>
                     @endif
 

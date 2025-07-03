@@ -38,6 +38,7 @@ Route::get('/go/{token}', [RedirectorController::class, 'redirect']);
 Route::middleware(['auth'])->prefix('webmaster')->group(function () {
     Route::get('/webmaster/links', [AffiliateLinkController::class, 'index'])->name('webmaster.links');
     Route::get('/links', [AffiliateLinkController::class, 'index'])->name('webmaster.links');
+    Route::get('/available-offers', [OfferController::class, 'availableOffers'])->name('webmaster.offers');
     Route::post('/subscribe/{offer}', [WebmasterController::class, 'subscribe']);
 });
 
