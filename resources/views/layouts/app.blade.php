@@ -86,7 +86,6 @@
     </div>
 </nav>
 
-<!-- Content wrapper -->
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -114,7 +113,7 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-@stack('scripts')
-<!-- @yield('scripts') -->
+<!-- @stack('scripts') -->
+@yield('scripts')
 </body>
 </html>

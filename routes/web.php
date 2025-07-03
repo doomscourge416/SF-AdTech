@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\RedirectorController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AffiliateLinkController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WebmasterController;
 use App\Http\Controllers\DashboardController;
@@ -36,7 +37,7 @@ Route::get('/go/{token}', [RedirectorController::class, 'redirect']);
 // Веб-мастер
 Route::middleware(['auth'])->prefix('webmaster')->group(function () {
     Route::get('/webmaster/links', [AffiliateLinkController::class, 'index'])->name('webmaster.links');
-    Route::get('/links', [WebmasterController::class, 'index']);
+    Route::get('/links', [AffiliateLinkController::class, 'index'])->name('webmaster.links');
     Route::post('/subscribe/{offer}', [WebmasterController::class, 'subscribe']);
 });
 
