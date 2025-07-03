@@ -68,10 +68,11 @@
                         <a class="nav-link" href="/register">Регистрация</a>
                     </li>
                 @else
-
-                    <span class="navbar-text me-3 text-white fw-bold">
-                        {{ auth()->user()->name }}
-                    </span>
+                    <a class="nav-link" href="{{ route('dashboard') }}" style="cursor: pointer;">
+                        <span class="navbar-text me-3 text-white fw-bold">
+                            {{ auth()->user()->name }}
+                        </span>
+                    <a/>
 
                     <li class="nav-item">
                         <form action="/logout" method="POST">

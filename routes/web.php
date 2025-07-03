@@ -6,6 +6,7 @@ use App\Http\Controllers\RedirectorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WebmasterController;
+use App\Http\Controllers\DashboardController;
 
 // Главная страница
 Route::get('/', function () {
@@ -20,8 +21,9 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
-// Офферы
+// По авторизации
 Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/offers', [OfferController::class, 'index']);
     Route::get('/offers/create', [OfferController::class, 'create']);
     Route::post('/offers', [OfferController::class, 'store']);
@@ -33,6 +35,7 @@ Route::get('/go/{token}', [RedirectorController::class, 'redirect']);
 
 // Веб-мастер
 Route::middleware(['auth'])->prefix('webmaster')->group(function () {
+    Route::get('/webmaster/links', [AffiliateLinkController::class, 'index'])->name('webmaster.links');
     Route::get('/links', [WebmasterController::class, 'index']);
     Route::post('/subscribe/{offer}', [WebmasterController::class, 'subscribe']);
 });

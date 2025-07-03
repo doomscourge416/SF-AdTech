@@ -15,4 +15,10 @@ class AffiliateLink extends Model
     {
         return $this->belongsTo(Offer::class);
     }
+
+    public function clicks()
+    {
+        return $this->hasMany(\App\Models\Click::class);
+    }
+    
 }
