@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Все офферы')
 @section('content')
-    <h1>Доступные офферы</h1>
+    <h1>Офферы доступные к подписке</h1>
 
     @if(count($offers) > 0)
         <ul>
@@ -19,5 +19,6 @@
         <p>Нет доступных офферов</p>
     @endif
 
-    <a href="/webmaster/links" class="btn btn-primary mt-3">Мои ссылки</a>
+    <!-- <a href="/webmaster/links" class="btn btn-primary mt-3">Мои ссылки</a> -->
+    <a href="/offers/create" class="btn btn-primary mt-3">Создать оффер</a>
 @endsection

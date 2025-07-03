@@ -26,15 +26,11 @@
                 @auth
 
                     <li class="nav-item">
-                            <a class="nav-link" href="/webmaster/links">Доступные офферы</a>
+                        <a class="nav-link" href="/offers">Все Офферы</a>
                     </li>
 
                     <li class="nav-item">
-                            <a class="nav-link" href="/offers">Все Офферы</a>
-                    </li>
-
-                    <li class="nav-item">
-                            <a class="nav-link" href="/affiliate-links">Аффилитивные ссылки</a>
+                            <a class="nav-link" href="/webmaster/links">Офферы доступные к подписке</a>
                     </li>
 
                     @if (auth()->user()->isAdvertiser())
@@ -51,7 +47,7 @@
                             <a class="nav-link" href="/webmaster">Веб-мастер</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webmaster/links">Доступные офферы</a>
+                            <a class="nav-link" href="/webmaster/links">Офферы доступные к подписке</a>
                         </li>
                     @endif
 
@@ -72,6 +68,11 @@
                         <a class="nav-link" href="/register">Регистрация</a>
                     </li>
                 @else
+
+                    <span class="navbar-text me-3 text-white fw-bold">
+                        {{ auth()->user()->name }}
+                    </span>
+
                     <li class="nav-item">
                         <form action="/logout" method="POST">
                             @csrf
