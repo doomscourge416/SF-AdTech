@@ -9,6 +9,7 @@ use App\Models\Click;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Subscription;
 
 
 class OfferController extends Controller
@@ -72,16 +73,21 @@ class OfferController extends Controller
 
     public function availableOffers()
     {
-        // Получаем ID офферов, на которые пользователь УЖЕ подписан
-        $subscribedOfferIds = auth()->user()->affiliateLinks()->pluck('offer_id');
+        $subscribedIds = auth()->user()->subscriptions()->pluck('offer_id');
 
-        // Выводим ВСЕ активные офферы, кроме уже подключенных
         $offers = Offer::where('is_active', true)
-            ->whereNotIn('id', $subscribedOfferIds)
-            ->latest() // Сортировка по дате создания (новые сверху)
+            ->whereNotIn('id', $subscribedIds)
             ->paginate(10);
 
         return view('webmaster.available-offers', compact('offers'));
+    }
+
+
+    public function toggle(Offer $offer)
+    {
+        $offer->update(['is_active' => !$offer->is_active]);
+
+        return back()->with('success', 'Статус оффера обновлен');
     }
 
 }

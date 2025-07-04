@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/offers/create', [OfferController::class, 'create']);
     Route::post('/offers', [OfferController::class, 'store']);
     Route::get('/offers/{offer}', [OfferController::class, 'show']);
+    Route::patch('/offers/{offer}/toggle', [OfferController::class, 'toggle'])->name('offers.toggle');
 });
 
 // Редирект
@@ -39,7 +40,7 @@ Route::middleware(['auth'])->prefix('webmaster')->group(function () {
     Route::get('/webmaster/links', [AffiliateLinkController::class, 'index'])->name('webmaster.links');
     Route::get('/links', [AffiliateLinkController::class, 'index'])->name('webmaster.links');
     Route::get('/available-offers', [OfferController::class, 'availableOffers'])->name('webmaster.offers');
-    Route::post('/subscribe/{offer}', [WebmasterController::class, 'subscribe']);
+    Route::post('/subscribe/{offer}', [WebmasterController::class, 'subscribe'])->name('webmaster.subscribe');
 });
 
 // Админка

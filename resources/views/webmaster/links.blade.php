@@ -19,11 +19,23 @@
                             $data = collect($chartData)->firstWhere('label', $link->offer->title);
                             $color = $data['color'] ?? '#E0E0E0';
                         @endphp
+
                         <li class="list-group-item d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
                                 <span style="background-color: {{ $color }}; width: 20px; height: 20px; display: inline-block; border-radius: 4px;" class="me-3"></span>
                                 <strong>{{ $link->offer->title }}</strong>
                             </div>
+
+                            <p>Статус: {{ $link->offer->is_active ? 'Активен' : 'Неактивен' }}</p>
+
+                            <form action="{{ route('offers.toggle', $link->offer->id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-sm btn-{{ $link->offer->is_active ? 'warning' : 'success' }}">
+                                    {{ $link->offer->is_active ? 'Деактивировать' : 'Активировать' }}
+                                </button>
+                            </form>
+
                             <a href="{{ url('/go/'.$link->token) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
                                 /go/{{ $link->token }}
                             </a>

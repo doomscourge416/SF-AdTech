@@ -10,7 +10,10 @@ class Offer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'target_url', 'payout', 'user_id'];
+    protected $fillable = ['title', 'target_url', 'payout', 'user_id', 'is_active'];
+    protected $casts = [
+        'is_active' => 'boolean'
+    ];
 
     public function affiliateLinks()
     {

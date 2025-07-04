@@ -53,24 +53,22 @@ class WebmasterController extends Controller
 
     public function subscribe(Request $request, $offerId)
     {
+        $user = auth()->user();
         $offer = Offer::findOrFail($offerId);
 
-        // Проверяем, есть ли уже у пользователя эта подписка
-        $existingLink = AffiliateLink::where('user_id', auth()->id())
-            ->where('offer_id', $offer->id)
-            ->first();
-
-        if (!$existingLink) {
-            $token = Str::random(10);
-
-            AffiliateLink::create([
-                'user_id' => auth()->id(),
-                'offer_id' => $offer->id,
-                'token' => $token,
-            ]);
+        // Проверяем существующую подписку
+        if ($user->subscriptions()->where('offer_id', $offer->id)->exists()) {
+            return back()->with('error', 'Вы уже подписаны на этот оффер');
         }
 
-        return redirect('/webmaster/links');
+        // Создаём подписку
+        $subscription = $user->subscriptions()->create([
+            'offer_id' => $offer->id,
+            'token' => Str::random(32)
+        ]);
+
+        return redirect()->route('webmaster.links')
+            ->with('success', 'Подписка оформлена! Ваша ссылка: '.url('/go/'.$subscription->token));
     }
 
 }
