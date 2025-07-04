@@ -25,9 +25,9 @@ class Subscription extends Model
     /**
      * Значения по умолчанию для атрибутов модели
      */
-    protected $attributes = [
-        'is_active' => true
-    ];
+    // protected $attributes = [
+    //     'is_active' => true
+    // ];
 
     /**
      * Связь с пользователем

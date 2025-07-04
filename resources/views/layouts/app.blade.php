@@ -30,7 +30,7 @@
                     </li>
 
                     <li class="nav-item">
-                            <a class="nav-link" href="/webmaster/links">Офферы доступные к подписке</a>
+                            <a class="nav-link" href="/webmaster/links">Мои офферы</a>
                     </li>
 
                     @if (auth()->user()->isAdvertiser())
