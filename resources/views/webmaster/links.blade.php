@@ -8,7 +8,7 @@
 @endphp
 
 <div class="container">
-    <h1 class="mb-4">Мои аффилиатные ссылки</h1>
+    <h1 class="mb-4">Ваши офферы</h1>
 
     @if(count($links) > 0)
         <div class="card mb-4">
@@ -45,7 +45,11 @@
             </div>
         </div>
     @else
-        <div class="alert alert-info">Вы ещё ни на какие офферы не подписаны</div>
+        <div class="alert alert-info">У вас нет своих офферов</div>
+        <div class="alert alert-info">
+            <a href="/offers/create">Создать оффер</a>
+        </div>
+
     @endif
 
     <div class="card mb-4">
@@ -61,7 +65,7 @@
     </div>
 
     <div class="d-flex gap-2">
-        <a href="/webmaster" class="btn btn-primary">Подписаться на новый оффер</a>
+        <a href="/webmaster/available-offers" class="btn btn-primary">Подписаться на новый оффер</a>
         <a href="/logout" class="btn btn-outline-danger">Выйти из аккаунта</a>
     </div>
 </div>
