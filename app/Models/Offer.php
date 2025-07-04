@@ -30,10 +30,10 @@ class Offer extends Model
         return $this->hasManyThrough(
             Click::class,
             AffiliateLink::class,
-            'offer_id',       // foreign key на Offer в affiliate_links
-            'affiliate_link_id', // foreign key на affiliate_link_id в clicks
-            'id',              // local key в Offer
-            'id'               // local key в affiliate_links
+            'offer_id',
+            'affiliate_link_id',
+            'id',
+            'id'              
         );
     }
 

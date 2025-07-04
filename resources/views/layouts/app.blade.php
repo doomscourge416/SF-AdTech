@@ -13,7 +13,7 @@
 </head>
 <body class="bg-light">
 
-<!-- Header -->
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">SF-AdTech</a>
@@ -103,14 +103,14 @@
 
 </div>
 
-<!-- Footer -->
+
 <footer class="footer mt-5 py-3 bg-white text-center border-top">
     <div class="container">
         <span class="text-muted">© 2025 SF-AdTech — MVP v1.4</span>
     </div>
 </footer>
 
-<!-- Bootstrap JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- @stack('scripts') -->

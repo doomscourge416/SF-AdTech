@@ -23,7 +23,7 @@ class Subscription extends Model
     protected $dates = ['start_date', 'end_date'];
 
     /**
-     * Значения по умолчанию для атрибутов модели
+     *
      */
     // protected $attributes = [
     //     'is_active' => true

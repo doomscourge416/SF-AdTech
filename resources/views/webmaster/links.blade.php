@@ -76,12 +76,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Получаем данные из PHP
+
     const chartData = @json($chartData);
     const ctx = document.getElementById('performanceChart');
     const fallback = document.getElementById('chartFallback');
 
-    // Проверяем наличие данных и элемента canvas
+
     if (!ctx || !chartData || chartData.length === 0) {
         if (fallback) {
             fallback.textContent = 'Нет данных для отображения графика';
@@ -89,12 +89,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Скрываем fallback сообщение
+
     if (fallback) {
         fallback.style.display = 'none';
     }
 
-    // Создаем график
+    
     try {
         new Chart(ctx, {
             type: 'bar',

@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('offer_id')->constrained()->cascadeOnDelete();
-            $table->string('token')->unique(); // Для реферальных ссылок
+            $table->string('token')->unique();
             $table->timestamps();
 
-            $table->unique(['user_id', 'offer_id']); // Запрещаем дубликаты
+            $table->unique(['user_id', 'offer_id']);
         });
     }
 

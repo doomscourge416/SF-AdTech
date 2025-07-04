@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('conversions', function (Blueprint $table) {
             $table->id();
 
-            // Правильный способ добавить внешний ключ
+
             $table->foreignId('click_id')
                 ->constrained()
                 ->onDelete('cascade');

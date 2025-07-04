@@ -98,7 +98,7 @@
             </div>
         </div>
     </div>
-</div> <!-- Закрываем row -->
+</div> 
 
 @endsection
 
